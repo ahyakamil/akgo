@@ -1,5 +1,5 @@
 # AKGo
-Easy and simple Go framework for build API
+Easy and simple Go framework for build REST API
 
 AKGo is a framework equipped with exception handler, log filter, env, and MDC. 
 AKGo also has a consistent response template, making it very easy to use.
