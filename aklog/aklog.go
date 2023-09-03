@@ -1,7 +1,7 @@
 package aklog
 
 import (
-	"be_news_portal/akmdc"
+	"akgo/akmdc"
 	"fmt"
 	"log"
 	"regexp"
@@ -34,9 +34,9 @@ func filter(message string) string {
 	secrets := " :::secretKeywordsRemovedFromLog="
 	for i := range secretKeyword {
 		keyword := secretKeyword[i]
-		if(strings.Contains(strings.ToLower(message), strings.ToLower(keyword))) {
+		if strings.Contains(strings.ToLower(message), strings.ToLower(keyword)) {
 			regexPattern := `(?i)` + keyword + `.[^,]+`
-			if(strings.Contains(strings.ToLower(message), "multipart/form-data")) {
+			if strings.Contains(strings.ToLower(message), "multipart/form-data") {
 				regexPattern = `(?i)` + keyword + `.\s*(\S+)`
 			}
 			re := regexp.MustCompile(regexPattern)

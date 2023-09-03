@@ -1,4 +1,4 @@
-module be_news_portal
+module akgo
 
 go 1.18
 

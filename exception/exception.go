@@ -1,13 +1,13 @@
 package exception
 
 import (
-	"be_news_portal/constant/code"
+	"akgo/constant/code"
 	"encoding/json"
 	"net/http"
 )
 
 type BaseErrorData struct {
-	Code int `json:"code"`
+	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 

@@ -1,12 +1,12 @@
 package main
 
 import (
-	"be_news_portal/aklog"
-	"be_news_portal/akmdc"
-	"be_news_portal/env"
-	"be_news_portal/exception"
-	"be_news_portal/feature/hello"
-	"be_news_portal/response"
+	"akgo/aklog"
+	"akgo/akmdc"
+	"akgo/env"
+	"akgo/exception"
+	"akgo/feature/hello"
+	"akgo/response"
 	"context"
 	"encoding/json"
 	"github.com/google/uuid"

@@ -1,18 +1,18 @@
 package response
 
 import (
-	"be_news_portal/constant/code"
+	"akgo/constant/code"
 	"encoding/json"
 	"net/http"
 )
 
 type BaseDataJson struct {
-	Code int `json:"code"`
+	Code int             `json:"code"`
 	Data json.RawMessage `json:"data"`
 }
 
 type BaseDataString struct {
-	Code int `json:"code"`
+	Code int    `json:"code"`
 	Data string `json:"data"`
 }
 
