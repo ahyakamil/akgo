@@ -40,7 +40,7 @@ secretKeyword = []string{"token", "password", "auth"}
 
 stdout:
 ----
-2023/09/03 21:57:26  WARN MDC_GROUP=6033b2b6-6e30-491c-a15f-fd0608457997 ":::method=GET :::headers="Accept":"*/*", "Postman-, "Accept-Encoding":"gzip, deflate, br", "Connection":"keep-alive", "Content-Length":"69", "Content-Type":"application/json", "User-Agent":"PostmanRuntime/7.29.2",  :::body={    "username": "okesips",    ",    "oke": "sip"} :::statusCode=405 :::response={"code":40005,"message":"Method not allowed"}" :::secretKeywordsRemovedFromLog=token,
+2023/09/03 21:57:26  WARN MDC_GROUP=6033b2b6-6e30-491c-a15f-fd0608457997 ":::method=GET :::uri=/hello :::headers="Accept":"*/*", "Postman-, "Accept-Encoding":"gzip, deflate, br", "Connection":"keep-alive", "Content-Length":"69", "Content-Type":"application/json", "User-Agent":"PostmanRuntime/7.29.2",  :::body={    "username": "okesips",    ",    "oke": "sip"} :::statusCode=405 :::response={"code":40005,"message":"Method not allowed"}" :::secretKeywordsRemovedFromLog=token,
 ----
 ```
 
