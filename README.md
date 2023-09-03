@@ -27,7 +27,7 @@ Error response:
 }
 ```
 
-You can use code for internal purposes that are not covered by HTTP status codes, such as helping the frontend distinguish response handling.
+You can use "code" for internal purposes that are not covered by HTTP status codes, such as helping the frontend distinguish response handling.
 
 
 Log:
