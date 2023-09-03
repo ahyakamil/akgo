@@ -1,7 +1,7 @@
 # AKGo
 Easy and simple Go framework for build API
 
-AKGo is a framework equipped with an exception handler, log filter, env, and MDC. 
+AKGo is a framework equipped with exception handler, log filter, env, and MDC. 
 AKGo also has a consistent response template, making it very easy to use.
 
 Endpoint: /hello<br>
