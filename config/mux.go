@@ -64,7 +64,7 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 				statusCode := 500
 				responseStr := "response=" + string(customResponseWriter.ResponseData)
 				statusCodeStr := "statusCode=" + strconv.Itoa(statusCode)
-				log := ":::" + methodStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + statusCodeStr + " :::" + responseStr
+				log := ":::" + methodStr + " :::" + statusCodeStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + responseStr
 				aklog.Error(log)
 				if errStr, ok := err.(string); ok {
 					if errStr == "" {
@@ -82,7 +82,7 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 		statusCode := customResponseWriter.StatusCode
 		responseStr := "response=" + string(customResponseWriter.ResponseData)
 		statusCodeStr := "statusCode=" + strconv.Itoa(statusCode)
-		log := ":::" + methodStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + statusCodeStr + " :::" + responseStr
+		log := ":::" + methodStr + " :::" + statusCodeStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + responseStr
 		if statusCode == 0 || (statusCode >= 200 && statusCode < 300) {
 			aklog.Info(log)
 		} else if statusCode >= 300 && statusCode < 500 {

@@ -20,6 +20,7 @@ func Pg() *pgx.Conn {
 	conn, err := pgx.Connect(context.Background(), dbURL)
 	if err != nil {
 		aklog.Error(err.Error())
+		panic(err.Error())
 	}
 	return conn
 }
