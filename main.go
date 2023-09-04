@@ -35,7 +35,7 @@ func main() {
 				return
 			}
 
-			result, err := account.DoRegister(registerReq)
+			_, err := account.DoRegister(registerReq)
 			if err != nil {
 				aklog.Error(err.Error())
 				if strings.Contains(err.Error(), "unique constraint") {
@@ -43,11 +43,10 @@ func main() {
 				} else {
 					panic(err.Error())
 				}
+				return
 			}
 
-			if result.Insert() {
-				response.JustOk(writer, http.StatusCreated)
-			}
+			response.JustOk(writer, http.StatusCreated)
 		} else {
 			exception.MethodNotAllowed(writer)
 		}
