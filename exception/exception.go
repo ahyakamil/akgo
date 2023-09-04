@@ -22,7 +22,7 @@ func GeneralError(writer http.ResponseWriter) {
 func BadRequest(writer http.ResponseWriter) {
 	resp := BaseErrorData{
 		Code:    code.GENERAL_WARNING,
-		Message: "General warning!",
+		Message: "Bad request!",
 	}
 	build(resp, writer, http.StatusBadRequest)
 }
