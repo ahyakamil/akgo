@@ -52,6 +52,8 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 		}
 
 		bodyStr := "body=" + string(body)
+		r.Body = ioutil.NopCloser(bytes.NewReader(body))
+
 
 		customResponseWriter := &CustomResponseWriter{
 			ResponseWriter: w,
