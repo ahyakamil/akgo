@@ -45,7 +45,7 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 		headers := r.Header
 		headersStr := "headers="
 		methodStr := "method=" + r.Method
-		uriStr := "uri=" + r.RequestURI
+		uriStr := "uri=" + r.Host + r.RequestURI
 		for key, values := range headers {
 			for _, value := range values {
 				headersStr += "\"" + key + "\"" + ":" + "\"" + value + "\"" + ", "
