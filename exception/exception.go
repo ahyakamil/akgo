@@ -11,21 +11,37 @@ type BaseErrorData struct {
 	Message string `json:"message"`
 }
 
-func MethodNotAllowed(writer http.ResponseWriter) {
+func GeneralError(writer http.ResponseWriter) {
 	resp := BaseErrorData{
-		Code:    code.METHOD_NOT_ALLOWED,
-		Message: "Method not allowed",
+		Code:    code.GENERAL_ERROR,
+		Message: "General error!",
 	}
-	build(resp, writer)
+	build(resp, writer, http.StatusInternalServerError)
 }
 
-func build(resp BaseErrorData, writer http.ResponseWriter) {
+func BadRequest(writer http.ResponseWriter) {
+	resp := BaseErrorData{
+		Code:    code.GENERAL_WARNING,
+		Message: "General warning!",
+	}
+	build(resp, writer, http.StatusBadRequest)
+}
+
+func MethodNotAllowed(writer http.ResponseWriter) {
+	resp := BaseErrorData{
+		Code:    code.GENERAL_WARNING,
+		Message: "Method not allowed",
+	}
+	build(resp, writer, http.StatusMethodNotAllowed)
+}
+
+func build(resp BaseErrorData, writer http.ResponseWriter, statusCode int) {
 	jsonResp, err := json.Marshal(resp)
 	if err != nil {
 		http.Error(writer, "Error encoding JSON response", http.StatusInternalServerError)
 		return
 	}
 	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusMethodNotAllowed)
+	writer.WriteHeader(statusCode)
 	writer.Write(jsonResp)
 }

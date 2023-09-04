@@ -3,6 +3,7 @@ package config
 import (
 	"akgo/aklog"
 	"akgo/akmdc"
+	"akgo/exception"
 	"context"
 	"github.com/google/uuid"
 	"io/ioutil"
@@ -28,7 +29,6 @@ func (c *CustomResponseWriter) WriteHeader(statusCode int) {
 	c.StatusCode = statusCode
 	c.ResponseWriter.WriteHeader(statusCode)
 }
-
 func GlobalMiddleware(next *CustomServeMux) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := context.WithValue(r.Context(), akmdc.MdcKey, make(akmdc.MDC))
@@ -57,6 +57,16 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 			ResponseWriter: w,
 			ResponseData:   []byte{},
 		}
+		defer func() {
+			if err := recover(); err != nil {
+				statusCode := 500
+				responseStr := "response=" + string(customResponseWriter.ResponseData)
+				statusCodeStr := "statusCode=" + strconv.Itoa(statusCode)
+				log := ":::" + methodStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + statusCodeStr + " :::" + responseStr
+				aklog.Error(log)
+				exception.GeneralError(customResponseWriter)
+			}
+		}()
 		next.DefaultServeMux.ServeHTTP(customResponseWriter, r.WithContext(ctx))
 
 		statusCode := customResponseWriter.StatusCode
