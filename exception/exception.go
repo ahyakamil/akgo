@@ -19,6 +19,14 @@ func GeneralError(writer http.ResponseWriter) {
 	build(resp, writer, http.StatusInternalServerError)
 }
 
+func GeneralErrorWM(message string, writer http.ResponseWriter) {
+	resp := BaseErrorData{
+		Code:    code.GENERAL_ERROR,
+		Message: message,
+	}
+	build(resp, writer, http.StatusInternalServerError)
+}
+
 func BadRequest(writer http.ResponseWriter) {
 	resp := BaseErrorData{
 		Code:    code.GENERAL_WARNING,

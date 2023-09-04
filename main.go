@@ -1,9 +1,11 @@
 package main
 
 import (
+	"akgo/aklog"
 	"akgo/config"
 	"akgo/env"
 	"akgo/exception"
+	"akgo/feature/account"
 	"akgo/feature/hello"
 	"akgo/response"
 	"encoding/json"
@@ -22,7 +24,26 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
+	http.HandleFunc("/accounts", func(writer http.ResponseWriter, request *http.Request) {
+		if request.Method == http.MethodPost {
+			var registerReq account.RegisterReq
+			decoder := json.NewDecoder(request.Body)
+			if err := decoder.Decode(&registerReq); err != nil {
+				aklog.Warn(err.Error())
+				exception.BadRequest(writer)
+				return
+			}
+
+			isCreated := account.DoRegister(registerReq)
+			if isCreated {
+				response.JustOk(writer, http.StatusCreated)
+			}
+		} else {
+			exception.MethodNotAllowed(writer)
+		}
+	})
+
+	http.HandleFunc("/feeds", func(writer http.ResponseWriter, request *http.Request) {
 		if request.Method == http.MethodPost {
 			resp := hello.DoHello(hello.HelloReq{
 				Name: "viola",

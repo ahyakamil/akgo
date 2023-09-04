@@ -4,6 +4,7 @@ import (
 	"akgo/aklog"
 	"akgo/akmdc"
 	"akgo/exception"
+	"bytes"
 	"context"
 	"github.com/google/uuid"
 	"io/ioutil"
@@ -54,7 +55,6 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 		bodyStr := "body=" + string(body)
 		r.Body = ioutil.NopCloser(bytes.NewReader(body))
 
-
 		customResponseWriter := &CustomResponseWriter{
 			ResponseWriter: w,
 			ResponseData:   []byte{},
@@ -66,7 +66,15 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 				statusCodeStr := "statusCode=" + strconv.Itoa(statusCode)
 				log := ":::" + methodStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + statusCodeStr + " :::" + responseStr
 				aklog.Error(log)
-				exception.GeneralError(customResponseWriter)
+				if errStr, ok := err.(string); ok {
+					if errStr == "" {
+						exception.GeneralError(customResponseWriter)
+					} else {
+						exception.GeneralErrorWM(errStr, customResponseWriter)
+					}
+				} else {
+					exception.GeneralError(customResponseWriter)
+				}
 			}
 		}()
 		next.DefaultServeMux.ServeHTTP(customResponseWriter, r.WithContext(ctx))
