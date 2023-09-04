@@ -37,10 +37,11 @@ func main() {
 
 			_, err := account.DoRegister(registerReq)
 			if err != nil {
-				aklog.Error(err.Error())
 				if strings.Contains(err.Error(), "unique constraint") {
+					aklog.Warn(err.Error())
 					exception.GeneralWarning(err.Error(), writer, http.StatusConflict)
 				} else {
+					aklog.Error(err.Error())
 					panic(err.Error())
 				}
 				return
