@@ -8,3 +8,6 @@ CREATE TABLE public.account (
 
 CREATE UNIQUE INDEX account_username_idx ON public.account (username);
 CREATE UNIQUE INDEX account_email_idx ON public.account (email);
+ALTER TABLE public.account ALTER COLUMN username SET NOT NULL;
+ALTER TABLE public.account ALTER COLUMN email SET NOT NULL;
+ALTER TABLE public.account ALTER COLUMN "password" SET NOT NULL;
