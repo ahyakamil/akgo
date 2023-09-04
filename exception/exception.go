@@ -35,6 +35,14 @@ func BadRequest(writer http.ResponseWriter) {
 	build(resp, writer, http.StatusBadRequest)
 }
 
+func GeneralWarning(message string, writer http.ResponseWriter, statusCode int) {
+	resp := BaseErrorData{
+		Code:    code.GENERAL_WARNING,
+		Message: message,
+	}
+	build(resp, writer, statusCode)
+}
+
 func MethodNotAllowed(writer http.ResponseWriter) {
 	resp := BaseErrorData{
 		Code:    code.GENERAL_WARNING,

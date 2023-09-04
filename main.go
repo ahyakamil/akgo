@@ -10,6 +10,7 @@ import (
 	"akgo/response"
 	"encoding/json"
 	"net/http"
+	"strings"
 )
 
 func main() {
@@ -34,8 +35,17 @@ func main() {
 				return
 			}
 
-			isCreated := account.DoRegister(registerReq)
-			if isCreated {
+			result, err := account.DoRegister(registerReq)
+			if err != nil {
+				aklog.Error(err.Error())
+				if strings.Contains(err.Error(), "unique constraint") {
+					exception.GeneralWarning(err.Error(), writer, http.StatusConflict)
+				} else {
+					panic(err.Error())
+				}
+			}
+
+			if result.Insert() {
 				response.JustOk(writer, http.StatusCreated)
 			}
 		} else {

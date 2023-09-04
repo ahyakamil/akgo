@@ -1,14 +1,8 @@
 package account
 
-import (
-	"akgo/aklog"
-)
+import "github.com/jackc/pgconn"
 
-func DoRegister(req RegisterReq) bool {
-	_, err := insert(req)
-	if err != nil {
-		aklog.Error(err.Error())
-		panic(err.Error())
-	}
-	return true
+func DoRegister(req RegisterReq) (pgconn.CommandTag, error) {
+	result, err := insert(req)
+	return result, err
 }
