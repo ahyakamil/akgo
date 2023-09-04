@@ -29,6 +29,7 @@ func main() {
 		if request.Method == http.MethodPost {
 			var registerReq account.RegisterReq
 			decoder := json.NewDecoder(request.Body)
+			decoder.DisallowUnknownFields()
 			if err := decoder.Decode(&registerReq); err != nil {
 				aklog.Warn(err.Error())
 				exception.BadRequest(writer)
