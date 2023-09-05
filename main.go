@@ -41,7 +41,10 @@ func main() {
 
 			_, err := account.DoRegister(registerReq)
 			if err != nil {
-				if strings.Contains(err.Error(), "unique constraint") {
+				if strings.Contains(err.Error(), "validation") {
+					aklog.Warn(err.Error())
+					exception.BadRequestWM(err.Error(), writer)
+				} else if strings.Contains(err.Error(), "unique constraint") {
 					aklog.Warn(err.Error())
 					exception.GeneralWarning(err.Error(), writer, http.StatusConflict)
 				} else {
