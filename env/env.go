@@ -4,6 +4,7 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"strconv"
 )
 
 var AppVersion string
@@ -14,6 +15,8 @@ var PGPort string
 var PGUsername string
 var PGPassword string
 var PGDatabase string
+var PGMinConn int
+var PGMaxConn int
 
 func init() {
 	if err := godotenv.Load(); err != nil {
@@ -29,4 +32,6 @@ func init() {
 	PGUsername = os.Getenv("PG_USERNAME")
 	PGPassword = os.Getenv("PG_PASSWORD")
 	PGDatabase = os.Getenv("PG_DATABASE")
+	PGMinConn, _ = strconv.Atoi(os.Getenv("PG_MIN_CONN"))
+	PGMaxConn, _ = strconv.Atoi(os.Getenv("PG_MAX_CONN"))
 }

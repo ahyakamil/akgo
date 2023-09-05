@@ -3,6 +3,7 @@ package main
 import (
 	"akgo/aklog"
 	"akgo/config"
+	"akgo/db"
 	"akgo/env"
 	"akgo/exception"
 	"akgo/feature/account"
@@ -14,6 +15,8 @@ import (
 )
 
 func main() {
+	defer db.Pg.Close()
+
 	customServeMux := &config.CustomServeMux{DefaultServeMux: http.DefaultServeMux}
 	mux := config.GlobalMiddleware(customServeMux)
 
