@@ -1,16 +1,30 @@
 package db
 
 import (
+	"akgo/aklog"
 	"akgo/env"
 	"context"
+	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"log"
 )
 
-var Pg *pgxpool.Pool
+var PgPool *pgxpool.Pool
+var Pg *pgxpool.Conn
 var (
 	dbURL = "postgresql://" + env.PGUsername + ":" + env.PGPassword + "@" + env.PGHost + ":" + env.PGPort + "/" + env.PGDatabase
 )
+
+func DeferAutoClose(f func() (pgconn.CommandTag, error)) (pgconn.CommandTag, error) {
+	conn, err := PgPool.Acquire(context.Background())
+	Pg = conn
+	defer conn.Release()
+	if err != nil {
+		aklog.Error(err.Error())
+		panic(err.Error())
+	}
+	return f()
+}
 
 func init() {
 	config, err := pgxpool.ParseConfig("")
@@ -26,7 +40,7 @@ func init() {
 	}
 
 	pool, err := pgxpool.ConnectConfig(context.Background(), config)
-	Pg = pool
+	PgPool = pool
 	if err != nil {
 		log.Fatalf("Unable to connect to the database: " + err.Error())
 	}
