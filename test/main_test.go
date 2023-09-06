@@ -10,7 +10,7 @@ func TestFeatures(t *testing.T) {
 	suite := godog.TestSuite{
 		ScenarioInitializer: func(s *godog.ScenarioContext) {
 			// Add step definitions here.
-			features.FeatureContextAccount(s)
+			features.FeatureContextRegister(s)
 		},
 		Options: &godog.Options{
 			Format:   "pretty",

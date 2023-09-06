@@ -16,6 +16,10 @@ func returnViolationsIsNil() {
 	assert.Equal(t, nil, violations)
 }
 
+func returnViolationsIsNotNil() {
+	assert.NotEqual(t, nil, violations)
+}
+
 func userRegister() {
 	validate := validator.New()
 	violations = validate.Struct(registerReq)
@@ -25,12 +29,13 @@ func payloadRegister(dataTable *godog.Table) {
 	mapFields(&registerReq, dataTable)
 }
 
-func StepDefinitions(ctx *godog.ScenarioContext) {
-	ctx.Step(`^the following valid register payload:$`, payloadRegister)
+func stepDefinitions(ctx *godog.ScenarioContext) {
+	ctx.Step(`^the following payload:$`, payloadRegister)
 	ctx.Step(`^user register$`, userRegister)
 	ctx.Step(`^return violations is nil$`, returnViolationsIsNil)
+	ctx.Step(`^return violations is not nil$`, returnViolationsIsNotNil)
 }
 
-func FeatureContextAccount(s *godog.ScenarioContext) {
-	StepDefinitions(s)
+func FeatureContextRegister(s *godog.ScenarioContext) {
+	stepDefinitions(s)
 }
