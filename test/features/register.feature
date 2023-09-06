@@ -13,4 +13,4 @@ Feature: Account
       | Username | Email             | Password |
       | he       | hello@hello.com   | hello123 |
     When user register
-    Then return violations is not nil
+    Then return violations contains "Error:Field validation for 'Username' failed on the 'min' tag"
