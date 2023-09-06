@@ -51,3 +51,9 @@ Any value match with secret keyword automatically removed from stdout.<br>
 Currently, only MDC_GROUP is being used as an example. You can add more MDCs as needed.<br>
 You can modify the log filter in the file aklog/aklog.go by changing or adding keywords to the secretKeyword variable.<br>
 MDC will be very helpful for you in searching and grouping logs.
+
+
+## Unit Test
+Just run "go test" on the folder "test"
+
+Test using cucumber (BDD style), learn more: https://github.com/cucumber/godog
