@@ -8,7 +8,7 @@ Feature: Register
     When user register
     Then return violations is nil
 
-  Scenario: User register with invalid payload, username less than 3 character:
+  Scenario: User register with invalid payload, username less than 3 characters:
     Given the following payload:
       | Username | Email             | Password |
       | he       | hello@hello.com   | hello123 |
