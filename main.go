@@ -60,7 +60,7 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/feeds", func(writer http.ResponseWriter, request *http.Request) {
+	http.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
 		if request.Method == http.MethodPost {
 			resp := hello.DoHello(hello.HelloReq{
 				Name: "viola",

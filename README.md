@@ -32,6 +32,8 @@ You can use "code" for internal purposes that are not covered by HTTP status cod
 
 Log:
 ```
+endpoint: /hello
+method: POST
 Given payload:
 {
     "username": "okesips",
@@ -43,7 +45,8 @@ secretKeyword = []string{"token", "password", "auth"}
 
 stdout:
 ----
-2023/09/03 21:57:26  WARN MDC_GROUP=6033b2b6-6e30-491c-a15f-fd0608457997 ":::method=GET :::statusCode=405 :::uri=/hello :::headers="Accept":"*/*", "Postman-, "Accept-Encoding":"gzip, deflate, br", "Connection":"keep-alive", "Content-Length":"69", "Content-Type":"application/json", "User-Agent":"PostmanRuntime/7.29.2",  :::body={    "username": "okesips",    ",    "oke": "sip"} :::response={"code":40000,"message":"Method not allowed"}" :::secretKeywordsRemovedFromLog=token,
+2023/09/06 12:07:39  INFO MDC_GROUP=26ee5fd5-9c60-4595-a2f3-f17ab24fbb36 "log to test mdc" :::secretKeywordsRemovedFromLog=
+2023/09/06 12:07:39  INFO MDC_GROUP=26ee5fd5-9c60-4595-a2f3-f17ab24fbb36 ":::method=POST :::statusCode=200 :::uri=localhost:8080/hello :::headers="Content-Type":"application/json", "User-Agent":"PostmanRuntime/7.29.2", "Postman-, "Accept-Encoding":"gzip, deflate, br", "Cache-Control":"no-cache", "Connection":"keep-alive", "Accept":"*/*", "Content-Length":"69",  :::body={    "username": "okesips",    ",    "oke": "sip"} :::response={"code":20000,"data":{"name":"viola","greeting":"Bonjour!"}}" :::secretKeywordsRemovedFromLog=token,
 ----
 ```
 
