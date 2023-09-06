@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	defer db.PgPool.Close()
+	defer db.Pg.Close()
 
 	customServeMux := &config.CustomServeMux{DefaultServeMux: http.DefaultServeMux}
 	mux := config.GlobalMiddleware(customServeMux)

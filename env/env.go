@@ -17,6 +17,7 @@ var PGPassword string
 var PGDatabase string
 var PGMinConn int
 var PGMaxConn int
+var PGMaxIdleTime int
 
 func init() {
 	if err := godotenv.Load(); err != nil {
@@ -34,4 +35,5 @@ func init() {
 	PGDatabase = os.Getenv("PG_DATABASE")
 	PGMinConn, _ = strconv.Atoi(os.Getenv("PG_MIN_CONN"))
 	PGMaxConn, _ = strconv.Atoi(os.Getenv("PG_MAX_CONN"))
+	PGMaxIdleTime, _ = strconv.Atoi(os.Getenv("PG_MAX_IDLE_TIME"))
 }
