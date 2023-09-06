@@ -1,5 +1,5 @@
-Feature: Account
-  Register, login, etc.
+Feature: Register
+  You know, for register
 
   Scenario: User register with valid payload
     Given the following payload:
