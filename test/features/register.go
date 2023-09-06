@@ -4,7 +4,6 @@ import (
 	"akgo/feature/account"
 	"github.com/cucumber/godog"
 	"github.com/go-playground/assert/v2"
-	"github.com/go-playground/validator/v10"
 	"strings"
 	"testing"
 )
@@ -22,8 +21,7 @@ func returnViolationContains(message string) {
 }
 
 func userRegister() {
-	validate := validator.New()
-	violation = validate.Struct(registerReq)
+	_, violation = account.DoRegister(registerReq)
 }
 
 func payloadRegister(dataTable *godog.Table) {
