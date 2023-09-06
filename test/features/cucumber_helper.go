@@ -3,7 +3,6 @@ package features
 import (
 	"fmt"
 	"github.com/cucumber/godog"
-	"log"
 	"reflect"
 )
 
@@ -25,7 +24,6 @@ func mapFields(target interface{}, table *godog.Table) error {
 	// Iterate through the table rows and populate the struct fields
 	for _, row := range table.Rows[1:] {
 		for i, cell := range row.Cells {
-			log.Print(cell.Value, i)
 			// Get the corresponding struct field name based on the table column name
 			structFieldName := fieldMap[i]
 			// Look for the struct field and set its value

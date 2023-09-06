@@ -6,4 +6,4 @@ Feature: Account
       | Username | Email             | Password |
       | hallo    | hello@hello.com   | hello123 |
     When user register
-    Then return success inserted
+    Then return violations is nil

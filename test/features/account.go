@@ -3,17 +3,17 @@ package features
 import (
 	"akgo/feature/account"
 	"github.com/cucumber/godog"
+	"github.com/go-playground/assert/v2"
 	"github.com/go-playground/validator/v10"
-	"log"
+	"testing"
 )
 
 var registerReq account.RegisterReq
 var violations error
+var t *testing.T
 
-func returnSuccessInserted() {
-	if violations != nil {
-		log.Fatal("Expected violation nil, but", violations)
-	}
+func returnViolationsIsNil() {
+	assert.Equal(t, nil, violations)
 }
 
 func userRegister() {
@@ -28,7 +28,7 @@ func payloadRegister(dataTable *godog.Table) {
 func StepDefinitions(ctx *godog.ScenarioContext) {
 	ctx.Step(`^the following valid register payload:$`, payloadRegister)
 	ctx.Step(`^user register$`, userRegister)
-	ctx.Step(`^return success inserted$`, returnSuccessInserted)
+	ctx.Step(`^return violations is nil$`, returnViolationsIsNil)
 }
 
 func FeatureContextAccount(s *godog.ScenarioContext) {

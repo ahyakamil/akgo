@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/cucumber/godog v0.13.0
+	github.com/go-playground/assert/v2 v2.2.0
 	github.com/go-playground/validator/v10 v10.15.3
 	github.com/google/uuid v1.3.1
 	github.com/jackc/pgconn v1.9.1-0.20210724152538-d89c8390a530
