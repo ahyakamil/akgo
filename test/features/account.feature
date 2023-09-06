@@ -3,7 +3,7 @@ Feature: Account
 
   Scenario: User register
     Given the following valid register payload:
-      | username | email             | password |
-      | hello    | hello@hello.com   | hello123 |
+      | Username | Email             | Password |
+      | hallo    | hello@hello.com   | hello123 |
     When user register
     Then return success inserted

@@ -8,22 +8,21 @@ import (
 )
 
 var registerReq account.RegisterReq
+var violations error
 
-func returnSuccessInserted() error {
-	return godog.ErrPending
+func returnSuccessInserted() {
+	if violations != nil {
+		log.Fatal("Expected violation nil, but", violations)
+	}
 }
 
-func userRegister() error {
+func userRegister() {
 	validate := validator.New()
-	violations := validate.Struct(registerReq)
-	log.Print(violations)
-	return violations
+	violations = validate.Struct(registerReq)
 }
 
-func payloadRegister(dataTable *godog.Table) error {
-	err := mapFields(&registerReq, dataTable)
-	log.Print(err)
-	return err
+func payloadRegister(dataTable *godog.Table) {
+	mapFields(&registerReq, dataTable)
 }
 
 func StepDefinitions(ctx *godog.ScenarioContext) {
