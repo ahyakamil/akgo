@@ -34,14 +34,14 @@ Log:
 ```
 endpoint: /hello
 method: POST
-Given payload:
+payload:
 {
     "username": "okesips",
     "token": "okeee",
     "oke": "sip"
 }
 
-secretKeyword = []string{"token", "password", "auth"}
+secretKeywords = []string{"token", "password", "auth"}
 
 stdout:
 ----
