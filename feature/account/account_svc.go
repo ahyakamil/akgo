@@ -7,9 +7,9 @@ import (
 
 func DoRegister(req RegisterReq) (pgconn.CommandTag, error) {
 	validate := validator.New()
-	violations := validate.Struct(req)
-	if violations != nil {
-		return nil, violations
+	violation := validate.Struct(req)
+	if violation != nil {
+		return nil, violation
 	}
 
 	account := Account{

@@ -10,20 +10,20 @@ import (
 )
 
 var registerReq account.RegisterReq
-var violations error
+var violation error
 var t *testing.T
 
-func returnViolationsIsNil() {
-	assert.Equal(t, nil, violations)
+func returnViolationIsNil() {
+	assert.Equal(t, nil, violation)
 }
 
-func returnViolationsContains(message string) {
-	assert.Equal(t, true, strings.Contains(violations.Error(), message))
+func returnViolationContains(message string) {
+	assert.Equal(t, true, strings.Contains(violation.Error(), message))
 }
 
 func userRegister() {
 	validate := validator.New()
-	violations = validate.Struct(registerReq)
+	violation = validate.Struct(registerReq)
 }
 
 func payloadRegister(dataTable *godog.Table) {
@@ -33,8 +33,8 @@ func payloadRegister(dataTable *godog.Table) {
 func stepDefinitions(ctx *godog.ScenarioContext) {
 	ctx.Step(`^the following payload:$`, payloadRegister)
 	ctx.Step(`^user register$`, userRegister)
-	ctx.Step(`^return violations is nil$`, returnViolationsIsNil)
-	ctx.Step(`^return violations contains "([^"]*)"$`, returnViolationsContains)
+	ctx.Step(`^return violation is nil$`, returnViolationIsNil)
+	ctx.Step(`^return violation contains "([^"]*)"$`, returnViolationContains)
 }
 
 func FeatureContextRegister(s *godog.ScenarioContext) {
