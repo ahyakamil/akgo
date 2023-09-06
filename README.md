@@ -47,9 +47,9 @@ stdout:
 ----
 ```
 
-Any value match with secret keyword automatically removed from stdout.<br>
+Any value match with secret keywords automatically removed from stdout.<br>
 Currently, only MDC_GROUP is being used as an example. You can add more MDCs as needed.<br>
-You can modify the log filter in the file aklog/aklog.go by changing or adding keywords to the secretKeyword variable.<br>
+You can modify the log filter in the file aklog/aklog.go by changing or adding keywords to the secretKeywords variable.<br>
 MDC will be very helpful for you in searching and grouping logs.
 
 

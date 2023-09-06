@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-var secretKeyword []string
+var secretKeywords []string
 
 func init() {
-	secretKeyword = []string{"token", "password", "auth"}
+	secretKeywords = []string{"token", "password", "auth"}
 }
 
 func Info(message string) {
@@ -32,8 +32,8 @@ func build(message string) string {
 
 func filter(message string) string {
 	secrets := " :::secretKeywordsRemovedFromLog="
-	for i := range secretKeyword {
-		keyword := secretKeyword[i]
+	for i := range secretKeywords {
+		keyword := secretKeywords[i]
 		if strings.Contains(strings.ToLower(message), strings.ToLower(keyword)) {
 			regexPattern := `(?i)` + keyword + `.[^,]+`
 			if strings.Contains(strings.ToLower(message), "multipart/form-data") {
