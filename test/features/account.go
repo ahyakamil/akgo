@@ -27,7 +27,7 @@ func payloadRegister(dataTable *godog.Table) error {
 }
 
 func StepDefinitions(ctx *godog.ScenarioContext) {
-	ctx.Step(`^the following valid payload register:$`, payloadRegister)
+	ctx.Step(`^the following valid register payload:$`, payloadRegister)
 	ctx.Step(`^user register$`, userRegister)
 	ctx.Step(`^return success inserted$`, returnSuccessInserted)
 }
