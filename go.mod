@@ -10,6 +10,7 @@ require (
 	github.com/jackc/pgconn v1.9.1-0.20210724152538-d89c8390a530
 	github.com/jackc/pgx/v4 v4.12.1-0.20210724153913-640aa07df17c
 	github.com/joho/godotenv v1.5.1
+	golang.org/x/crypto v0.7.0
 )
 
 require (
@@ -31,7 +32,6 @@ require (
 	github.com/jackc/puddle v1.1.3 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/crypto v0.7.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect

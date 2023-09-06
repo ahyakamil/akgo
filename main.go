@@ -10,12 +10,16 @@ import (
 	"akgo/feature/hello"
 	"akgo/response"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 )
 
 func main() {
 	defer db.Pg.Close()
+	if !config.IsRSAPrivateKey(env.PasswordPrivateKey) {
+		log.Fatal("Invalid private key!")
+	}
 
 	customServeMux := &config.CustomServeMux{DefaultServeMux: http.DefaultServeMux}
 	mux := config.GlobalMiddleware(customServeMux)
