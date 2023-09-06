@@ -54,6 +54,6 @@ MDC will be very helpful for you in searching and grouping logs.
 
 
 ## Unit Test
-Just run "go test" on the folder "test"
+Just run "go test" on the "test" folder
 
 Test using cucumber (BDD style), learn more: https://github.com/cucumber/godog
