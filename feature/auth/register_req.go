@@ -1,4 +1,4 @@
-package account
+package auth
 
 type RegisterReq struct {
 	Username string `json:"username" validate:"min=3,max=16"`

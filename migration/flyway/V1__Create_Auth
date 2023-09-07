@@ -1,0 +1,13 @@
+CREATE TABLE public.auth (
+	id varchar NOT NULL,
+	username varchar NULL,
+	email varchar NULL,
+	"password" varchar NULL,
+	CONSTRAINT auth_pk PRIMARY KEY (id)
+);
+
+CREATE UNIQUE INDEX auth_username_idx ON public.auth (username);
+CREATE UNIQUE INDEX auth_email_idx ON public.auth (email);
+ALTER TABLE public.auth ALTER COLUMN username SET NOT NULL;
+ALTER TABLE public.auth ALTER COLUMN email SET NOT NULL;
+ALTER TABLE public.auth ALTER COLUMN "password" SET NOT NULL;

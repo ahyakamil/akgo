@@ -3,17 +3,23 @@ package db
 import (
 	"akgo/env"
 	"context"
+	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"log"
 	"time"
 )
 
-var Pg *pgxpool.Pool
+type PoolInterface interface {
+	Exec(ctx context.Context, sql string, arguments ...interface{}) (pgconn.CommandTag, error)
+	Close()
+}
+
+var Pg PoolInterface
 var (
 	dbURL = "postgresql://" + env.PGUsername + ":" + env.PGPassword + "@" + env.PGHost + ":" + env.PGPort + "/" + env.PGDatabase
 )
 
-func init() {
+func InitPG() {
 	config, err := pgxpool.ParseConfig("")
 	config.ConnConfig.Host = env.PGHost
 	config.ConnConfig.User = env.PGUsername

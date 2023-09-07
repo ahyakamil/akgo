@@ -1,6 +1,6 @@
-package account
+package auth
 
-type Account struct {
+type Auth struct {
 	Username string
 	Password string
 	Email    string

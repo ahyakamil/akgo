@@ -6,7 +6,7 @@ import (
 	"akgo/db"
 	"akgo/env"
 	"akgo/exception"
-	"akgo/feature/account"
+	"akgo/feature/auth"
 	"akgo/feature/hello"
 	"akgo/response"
 	"encoding/json"
@@ -16,6 +16,7 @@ import (
 )
 
 func main() {
+	db.InitPG()
 	defer db.Pg.Close()
 	if !config.IsRSAPrivateKey(env.PasswordPrivateKey) {
 		log.Fatal("Invalid private key!")
@@ -32,9 +33,9 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/accounts", func(writer http.ResponseWriter, request *http.Request) {
+	http.HandleFunc("/auth/register", func(writer http.ResponseWriter, request *http.Request) {
 		if request.Method == http.MethodPost {
-			var registerReq account.RegisterReq
+			var registerReq auth.RegisterReq
 			decoder := json.NewDecoder(request.Body)
 			decoder.DisallowUnknownFields()
 			if err := decoder.Decode(&registerReq); err != nil {
@@ -43,7 +44,7 @@ func main() {
 				return
 			}
 
-			_, err := account.DoRegister(registerReq)
+			_, err := auth.DoRegister(registerReq)
 			if err != nil {
 				if strings.Contains(err.Error(), "validation") {
 					aklog.Warn(err.Error())
@@ -59,6 +60,14 @@ func main() {
 			}
 
 			response.JustOk(writer, http.StatusCreated)
+		} else {
+			exception.MethodNotAllowed(writer)
+		}
+	})
+
+	http.HandleFunc("/auth/login", func(writer http.ResponseWriter, request *http.Request) {
+		if request.Method == http.MethodPost {
+
 		} else {
 			exception.MethodNotAllowed(writer)
 		}

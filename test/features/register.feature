@@ -7,6 +7,7 @@ Feature: Register
       | hello    | hello@hello.com   | hello123 |
     When user register
     Then return violation is nil
+    And command tag contains "INSERT"
 
   Scenario: User register with invalid payload, username less than 3 characters:
     Given the following payload:

@@ -1,4 +1,4 @@
-package account
+package auth
 
 import (
 	"akgo/config"
@@ -14,11 +14,11 @@ func DoRegister(req RegisterReq) (pgconn.CommandTag, error) {
 	}
 
 	hashPassword, _ := config.HashPassword(req.Password)
-	account := Account{
+	auth := Auth{
 		Username: req.Username,
 		Email:    req.Email,
 		Password: hashPassword,
 	}
-	result, err := insert(account)
+	result, err := insert(auth)
 	return result, err
 }

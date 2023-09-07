@@ -1,4 +1,4 @@
-package account
+package auth
 
 type RegisterResp struct {
 	ID       string
