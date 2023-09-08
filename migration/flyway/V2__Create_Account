@@ -1,0 +1,11 @@
+CREATE TABLE public.account (
+	id varchar NOT NULL,
+	"name" varchar NULL,
+	about varchar NULL,
+	"role" varchar NULL,
+	mobile varchar NULL,
+	auth_id varchar NULL,
+	CONSTRAINT account_pk PRIMARY KEY (id)
+);
+ALTER TABLE public.account ADD CONSTRAINT account_un UNIQUE (auth_id);
+ALTER TABLE public.account ADD CONSTRAINT account_fk FOREIGN KEY (auth_id) REFERENCES public.auth(id) ON UPDATE CASCADE;

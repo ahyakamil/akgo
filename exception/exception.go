@@ -14,7 +14,7 @@ type BaseErrorData struct {
 func GeneralError(writer http.ResponseWriter) {
 	resp := BaseErrorData{
 		Code:    code.GENERAL_ERROR,
-		Message: "General error!",
+		Message: "General error_message!",
 	}
 	build(resp, writer, http.StatusInternalServerError)
 }

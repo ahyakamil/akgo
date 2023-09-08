@@ -56,13 +56,7 @@ func CreateRefreshToken(user User) (string, error) {
 	return token.SignedString(secretKey)
 }
 
-func storeRefreshToken(userID uint, refreshToken string) error {
-	ctx := context.Background()
-	key := fmt.Sprintf("refresh_token:%d", userID)
-	return redisClient.Set(ctx, key, refreshToken, 0).Err()
-}
-
-func parseAccessToken(tokenString string) (*Claims, error) {
+func ParseAccessToken(tokenString string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return secretKey, nil
 	})
@@ -78,7 +72,7 @@ func parseAccessToken(tokenString string) (*Claims, error) {
 	return nil, fmt.Errorf("invalid access token")
 }
 
-func parseRefreshToken(tokenString string) (*Claims, error) {
+func ParseRefreshToken(tokenString string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return secretKey, nil
 	})
@@ -94,4 +88,27 @@ func parseRefreshToken(tokenString string) (*Claims, error) {
 	}
 
 	return nil, fmt.Errorf("invalid refresh token")
+}
+
+func RevokeAccessToken(tokenString string) error {
+	claims, err := ParseAccessToken(tokenString)
+	if err != nil {
+		return err
+	}
+
+	ctx := context.Background()
+	key := fmt.Sprintf("token_blacklist:%s", claims.Id)
+	return redisClient.SAdd(ctx, key, tokenString).Err()
+}
+
+func IsAccessTokenRevoked(tokenString string) bool {
+	claims, err := ParseAccessToken(tokenString)
+	if err != nil {
+		return false
+	}
+
+	ctx := context.Background()
+	key := fmt.Sprintf("token_blacklist:%s", claims.Id)
+	exists, err := redisClient.SIsMember(ctx, key, tokenString).Result()
+	return err == nil && exists
 }

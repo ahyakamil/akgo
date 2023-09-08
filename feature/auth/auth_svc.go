@@ -2,6 +2,9 @@ package auth
 
 import (
 	"akgo/config"
+	"akgo/db"
+	"akgo/feature/account"
+	"context"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgconn"
 )
@@ -13,14 +16,32 @@ func DoRegister(req RegisterReq) (pgconn.CommandTag, error) {
 		return nil, violation
 	}
 
+	tx, err := db.Pg.Begin(context.Background())
+	defer tx.Commit(context.Background())
 	hashPassword, _ := config.HashPassword(req.Password)
-	auth := Auth{
+	authModel := Auth{
 		Username: req.Username,
 		Email:    req.Email,
 		Password: hashPassword,
 	}
-	result, err := insert(auth)
-	return result, err
+	insertAuth, authId, err := Insert(authModel, tx)
+	if err != nil {
+		return nil, err
+	}
+
+	accountModel := account.Account{
+		Name:   req.Name,
+		About:  req.About,
+		Role:   req.Role,
+		Mobile: req.Mobile,
+		AuthID: authId,
+	}
+
+	_, _, err = account.Insert(accountModel, tx)
+	if err != nil {
+		tx.Rollback(context.Background())
+	}
+	return insertAuth, err
 }
 
 func DoLogin(req LoginReq) (LoginResp, error) {
@@ -36,7 +57,11 @@ func DoLogin(req LoginReq) (LoginResp, error) {
 		Username: req.Username,
 		Password: hashPassword,
 	}
-	result, err := getLogin(auth)
+	result, err := GetLogin(auth)
+	if err != nil {
+		return resp, err
+	}
+
 	accessToken, err := config.CreateAccessToken(config.User{
 		ID:       result.ID,
 		Username: result.Username,

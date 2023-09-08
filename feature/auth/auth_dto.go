@@ -4,6 +4,10 @@ type RegisterReq struct {
 	Username string `json:"username" validate:"min=3,max=16"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
+	Name     string `json:"name"`
+	About    string `json:"about"`
+	Role     string `json:"role"`
+	Mobile   string `json:"mobile"`
 }
 
 type RegisterResp struct {
