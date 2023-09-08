@@ -4,6 +4,7 @@ import (
 	"akgo/env"
 	"context"
 	"github.com/jackc/pgconn"
+	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"log"
 	"time"
@@ -12,6 +13,7 @@ import (
 type PoolInterface interface {
 	Exec(ctx context.Context, sql string, arguments ...interface{}) (pgconn.CommandTag, error)
 	Close()
+	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
 }
 
 var Pg PoolInterface

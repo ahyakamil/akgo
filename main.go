@@ -67,7 +67,22 @@ func main() {
 
 	http.HandleFunc("/auth/login", func(writer http.ResponseWriter, request *http.Request) {
 		if request.Method == http.MethodPost {
+			var loginReq auth.LoginReq
+			decoder := json.NewDecoder(request.Body)
+			decoder.DisallowUnknownFields()
+			if err := decoder.Decode(&loginReq); err != nil {
+				aklog.Warn(err.Error())
+				exception.BadRequest(writer)
+				return
+			}
 
+			loginResp, err := auth.DoLogin(loginReq)
+			if err != nil {
+				exception.Unauthorized(writer)
+				return
+			}
+			jsonResp, _ := json.Marshal(loginResp)
+			response.Ok(jsonResp, writer)
 		} else {
 			exception.MethodNotAllowed(writer)
 		}

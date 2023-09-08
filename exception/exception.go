@@ -59,6 +59,14 @@ func MethodNotAllowed(writer http.ResponseWriter) {
 	build(resp, writer, http.StatusMethodNotAllowed)
 }
 
+func Unauthorized(writer http.ResponseWriter) {
+	resp := BaseErrorData{
+		Code:    code.GENERAL_WARNING,
+		Message: "Unauthorized!",
+	}
+	build(resp, writer, http.StatusUnauthorized)
+}
+
 func build(resp BaseErrorData, writer http.ResponseWriter, statusCode int) {
 	jsonResp, err := json.Marshal(resp)
 	if err != nil {
