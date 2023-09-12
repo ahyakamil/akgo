@@ -5,6 +5,7 @@ import (
 	"akgo/db"
 	"akgo/feature/account"
 	"context"
+	"errors"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgconn"
 )
@@ -32,9 +33,14 @@ func DoRegister(req RegisterReq) (pgconn.CommandTag, error) {
 	accountModel := account.Account{
 		Name:   req.Name,
 		About:  req.About,
-		Role:   req.Role,
+		Role:   account.MapStringToRole(req.Role),
 		Mobile: req.Mobile,
 		AuthID: authId,
+	}
+
+	if accountModel.Role == account.ROLE_UNKNOWN {
+		tx.Rollback(context.Background())
+		return nil, errors.New(ERROR_MAP_ROLE)
 	}
 
 	_, _, err = account.Insert(accountModel, tx)

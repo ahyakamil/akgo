@@ -52,6 +52,9 @@ func main() {
 				} else if strings.Contains(err.Error(), "unique constraint") {
 					aklog.Warn(err.Error())
 					exception.GeneralWarning(err.Error(), writer, http.StatusConflict)
+				} else if err.Error() == auth.ERROR_MAP_ROLE {
+					aklog.Warn(err.Error())
+					exception.BadRequestWM(err.Error(), writer)
 				} else {
 					aklog.Error(err.Error())
 					panic(err.Error())
