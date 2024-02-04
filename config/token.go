@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis/v8"
+	"strings"
 	"time"
 )
 
@@ -57,6 +58,7 @@ func CreateRefreshToken(user User) (string, error) {
 }
 
 func ParseAccessToken(tokenString string) (*Claims, error) {
+	tokenString = strings.ReplaceAll(tokenString, "Bearer ", "")
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return secretKey, nil
 	})

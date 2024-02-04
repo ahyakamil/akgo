@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type CustomServeMux struct {
@@ -32,63 +33,106 @@ func (c *CustomResponseWriter) WriteHeader(statusCode int) {
 }
 func GlobalMiddleware(next *CustomServeMux) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "accept, origin, content-type, x-json, x-prototype-version, x-requested-with, authorization")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, UPDATE, PUT, PATCH, DELETE")
 		ctx := context.WithValue(r.Context(), akmdc.MdcKey, make(akmdc.MDC))
-		akmdc.Ctx = ctx
-		mdc := akmdc.GetMDC()
-		mdc["MDC_GROUP"] = uuid.New().String()
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			aklog.Error("Error read body!")
-			return
-		}
-
-		headers := r.Header
-		headersStr := "headers="
-		methodStr := "method=" + r.Method
-		uriStr := "uri=" + r.Host + r.RequestURI
-		for key, values := range headers {
-			for _, value := range values {
-				headersStr += "\"" + key + "\"" + ":" + "\"" + value + "\"" + ", "
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(204)
+			next.DefaultServeMux.ServeHTTP(w, r)
+		} else {
+			akmdc.Ctx = ctx
+			mdc := akmdc.GetMDC()
+			mdc["MDC_GROUP"] = uuid.New().String()
+			body, err := ioutil.ReadAll(r.Body)
+			if err != nil {
+				aklog.Error("Error read body!")
+				return
 			}
-		}
 
-		bodyStr := "body=" + string(body)
-		r.Body = ioutil.NopCloser(bytes.NewReader(body))
-
-		customResponseWriter := &CustomResponseWriter{
-			ResponseWriter: w,
-			ResponseData:   []byte{},
-		}
-		defer func() {
-			if err := recover(); err != nil {
-				statusCode := 500
-				responseStr := "response=" + string(customResponseWriter.ResponseData)
-				statusCodeStr := "statusCode=" + strconv.Itoa(statusCode)
-				log := ":::" + methodStr + " :::" + statusCodeStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + responseStr
-				aklog.Error(log)
-				if errStr, ok := err.(string); ok {
-					if errStr == "" {
-						exception.GeneralError(customResponseWriter)
-					} else {
-						exception.GeneralErrorWM(errStr, customResponseWriter)
-					}
-				} else {
-					exception.GeneralError(customResponseWriter)
+			headers := r.Header
+			headersStr := "headers="
+			methodStr := "method=" + r.Method
+			uriStr := "uri=" + r.Host + r.RequestURI
+			for key, values := range headers {
+				for _, value := range values {
+					headersStr += "\"" + key + "\"" + ":" + "\"" + value + "\"" + ", "
 				}
 			}
-		}()
-		next.DefaultServeMux.ServeHTTP(customResponseWriter, r.WithContext(ctx))
 
-		statusCode := customResponseWriter.StatusCode
-		responseStr := "response=" + string(customResponseWriter.ResponseData)
-		statusCodeStr := "statusCode=" + strconv.Itoa(statusCode)
-		log := ":::" + methodStr + " :::" + statusCodeStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + responseStr
-		if statusCode == 0 || (statusCode >= 200 && statusCode < 300) {
-			aklog.Info(log)
-		} else if statusCode >= 300 && statusCode < 500 {
-			aklog.Warn(log)
-		} else {
-			aklog.Error(log)
+			bodyStr := "body=" + string(body)
+			r.Body = ioutil.NopCloser(bytes.NewReader(body))
+
+			nonAuthorizedEndpoints := []string{"/auth/register", "/auth/login", "/auth/token"}
+			nonAuthorizedWildcards := []string{"/public/"}
+			requestedEndpoint := r.URL.Path
+			isNeedAuthorized := true
+			for _, endpoint := range nonAuthorizedEndpoints {
+				if requestedEndpoint == endpoint {
+					isNeedAuthorized = false
+					break
+				}
+			}
+
+			if isNeedAuthorized {
+				for _, endpoint := range nonAuthorizedWildcards {
+					if strings.Contains(requestedEndpoint, endpoint) {
+						isNeedAuthorized = false
+						break
+					}
+				}
+			}
+
+			if isNeedAuthorized {
+				authorizationHeader := r.Header.Get("Authorization")
+				if authorizationHeader == "" {
+					exception.Unauthorized(w)
+					return
+				} else {
+					_, err := ParseAccessToken(authorizationHeader)
+					if err != nil {
+						exception.Unauthorized(w)
+						return
+					}
+				}
+			}
+
+			customResponseWriter := &CustomResponseWriter{
+				ResponseWriter: w,
+				ResponseData:   []byte{},
+			}
+			defer func() {
+				if err := recover(); err != nil {
+					statusCode := 500
+					responseStr := "response=" + string(customResponseWriter.ResponseData)
+					statusCodeStr := "statusCode=" + strconv.Itoa(statusCode)
+					log := ":::" + methodStr + " :::" + statusCodeStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + responseStr
+					aklog.Error(log)
+					if errStr, ok := err.(string); ok {
+						if errStr == "" {
+							exception.GeneralError(customResponseWriter)
+						} else {
+							exception.GeneralErrorWM(errStr, customResponseWriter)
+						}
+					} else {
+						exception.GeneralError(customResponseWriter)
+					}
+				}
+			}()
+
+			next.DefaultServeMux.ServeHTTP(customResponseWriter, r.WithContext(ctx))
+
+			statusCode := customResponseWriter.StatusCode
+			responseStr := "response=" + string(customResponseWriter.ResponseData)
+			statusCodeStr := "statusCode=" + strconv.Itoa(statusCode)
+			log := ":::" + methodStr + " :::" + statusCodeStr + " :::" + uriStr + " :::" + headersStr + " :::" + bodyStr + " :::" + responseStr
+			if statusCode == 0 || (statusCode >= 200 && statusCode < 300) {
+				aklog.Info(log)
+			} else if statusCode >= 300 && statusCode < 500 {
+				aklog.Warn(log)
+			} else {
+				aklog.Error(log)
+			}
 		}
 	})
 }
