@@ -14,6 +14,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.2
 	golang.org/x/crypto v0.7.0
+	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 )
 
 require (

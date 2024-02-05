@@ -1,0 +1,15 @@
+CREATE TABLE public.account (
+	id varchar NOT NULL,
+	username varchar NOT NULL,
+	"name" varchar NOT NULL,
+	email varchar NOT NULL,
+	about varchar NULL,
+	"role" varchar NOT NULL,
+	mobile varchar NOT NULL,
+	"password" varchar NOT NULL,
+	CONSTRAINT account_pk PRIMARY KEY (id),
+	CONSTRAINT unique_username UNIQUE (username),
+    CONSTRAINT unique_email UNIQUE (email),
+    CONSTRAINT unique_mobile UNIQUE (mobile)
+);
+

@@ -1,12 +1,15 @@
 package account
 
 type Account struct {
-	ID     string
-	Name   string
-	About  string
-	Role   Role
-	Mobile string
-	AuthID string
+	ID       string
+	Name     string
+	About    string
+	Role     Role
+	Mobile   string
+	AuthID   string
+	Username string
+	Password string
+	Email    string
 }
 
 type Role string

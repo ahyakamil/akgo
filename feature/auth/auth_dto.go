@@ -2,7 +2,7 @@ package auth
 
 type RegisterReq struct {
 	Username string `json:"username" validate:"min=3,max=16"`
-	Password string `json:"password"`
+	Password string `json:"password" validate:"min=6,max=16"`
 	Email    string `json:"email"`
 	Name     string `json:"name"`
 	About    string `json:"about"`

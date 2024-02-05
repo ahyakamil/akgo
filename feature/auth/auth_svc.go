@@ -2,9 +2,7 @@ package auth
 
 import (
 	"akgo/config"
-	"akgo/db"
 	"akgo/feature/account"
-	"context"
 	"errors"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgconn"
@@ -17,37 +15,23 @@ func DoRegister(req RegisterReq) (pgconn.CommandTag, error) {
 		return nil, violation
 	}
 
-	tx, err := db.Pg.Begin(context.Background())
-	defer tx.Commit(context.Background())
 	hashPassword, _ := config.HashPassword(req.Password)
-	authModel := Auth{
+	accountModel := account.Account{
+		Name:     req.Name,
+		About:    req.About,
+		Role:     account.MapStringToRole(req.Role),
+		Mobile:   req.Mobile,
+		Password: hashPassword,
 		Username: req.Username,
 		Email:    req.Email,
-		Password: hashPassword,
-	}
-	insertAuth, authId, err := Insert(authModel, tx)
-	if err != nil {
-		return nil, err
-	}
-
-	accountModel := account.Account{
-		Name:   req.Name,
-		About:  req.About,
-		Role:   account.MapStringToRole(req.Role),
-		Mobile: req.Mobile,
-		AuthID: authId,
 	}
 
 	if accountModel.Role == account.ROLE_UNKNOWN {
-		tx.Rollback(context.Background())
 		return nil, errors.New(ERROR_MAP_ROLE)
 	}
 
-	_, _, err = account.Insert(accountModel, tx)
-	if err != nil {
-		tx.Rollback(context.Background())
-	}
-	return insertAuth, err
+	commandTag, _, err := account.Insert(accountModel)
+	return commandTag, err
 }
 
 func DoLogin(req LoginReq) (LoginResp, error) {
@@ -59,11 +43,11 @@ func DoLogin(req LoginReq) (LoginResp, error) {
 	}
 
 	hashPassword, err := config.HashPassword(req.Password)
-	auth := Auth{
+	accountModel := account.Account{
 		Username: req.Username,
 		Password: hashPassword,
 	}
-	result, err := GetLogin(auth)
+	result, err := account.GetLogin(accountModel)
 	if err != nil {
 		return resp, err
 	}

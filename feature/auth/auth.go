@@ -1,8 +1,6 @@
 package auth
 
-type Auth struct {
-	ID       string
-	Username string
-	Password string
-	Email    string
+type TokenReq struct {
+	GrantType    string `json:"grant_type"`
+	RefreshToken string `json:"refresh_token"`
 }

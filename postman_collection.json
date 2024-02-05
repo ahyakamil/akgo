@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "e0d5725c-a4dc-4c9a-809e-b9e0287870e5",
+		"name": "Respublica",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2934904"
+	},
+	"item": [
+		{
+			"name": "account-service",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"ahyakamil\",\n    \"email\": \"ahyakamil@gmail.com\",\n    \"password\": \"Lipsum123\",\n    \"name\": \"ahya\",\n    \"about\": \"lorem ipsum\",\n    \"mobile\": \"628571234556\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{account-service}}/auth/register",
+									"host": [
+										"{{account-service}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody).data;",
+											"console.log(jsonData);",
+											"if(jsonData !== null){",
+											"    pm.environment.set(\"token\", jsonData.accessToken);",
+											"    pm.environment.set(\"refresh-token\", jsonData.refreshToken);",
+											"    pm.environment.set(\"account-id\", jsonData.accountId);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"ahyakamil\",\n    \"password\": \"Lipsum123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{account-service}}/auth/login",
+									"host": [
+										"{{account-service}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "refresh token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{account-service}}/auth/token?grant_type=refresh_token&refresh_token={{refresh-token}}",
+									"host": [
+										"{{account-service}}"
+									],
+									"path": [
+										"auth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "refresh_token"
+										},
+										{
+											"key": "refresh_token",
+											"value": "{{refresh-token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
