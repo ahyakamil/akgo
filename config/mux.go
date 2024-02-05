@@ -37,13 +37,15 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 		w.Header().Set("Access-Control-Allow-Headers", "accept, origin, content-type, x-json, x-prototype-version, x-requested-with, authorization")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, UPDATE, PUT, PATCH, DELETE")
 		ctx := context.WithValue(r.Context(), akmdc.MdcKey, make(akmdc.MDC))
+		akmdc.Ctx = ctx
+		mdc := akmdc.GetMDC()
+		mdcUUID := uuid.New().String()
+		mdc["MDC_GROUP"] = mdcUUID
+
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(204)
 			next.DefaultServeMux.ServeHTTP(w, r)
 		} else {
-			akmdc.Ctx = ctx
-			mdc := akmdc.GetMDC()
-			mdc["MDC_GROUP"] = uuid.New().String()
 			body, err := ioutil.ReadAll(r.Body)
 			if err != nil {
 				aklog.Error("Error read body!")
@@ -120,6 +122,7 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 				}
 			}()
 
+			customResponseWriter.Header().Set("Mdc-Group", mdcUUID)
 			next.DefaultServeMux.ServeHTTP(customResponseWriter, r.WithContext(ctx))
 
 			statusCode := customResponseWriter.StatusCode
