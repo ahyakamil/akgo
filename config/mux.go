@@ -65,7 +65,7 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 			bodyStr := "body=" + string(body)
 			r.Body = ioutil.NopCloser(bytes.NewReader(body))
 
-			nonAuthorizedEndpoints := []string{"/auth/register", "/auth/login", "/auth/token"}
+			nonAuthorizedEndpoints := []string{"/auth/register", "/auth/login", "/auth/token", "/info"}
 			nonAuthorizedWildcards := []string{"/public/"}
 			requestedEndpoint := r.URL.Path
 			isNeedAuthorized := true
