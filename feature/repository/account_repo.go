@@ -4,25 +4,25 @@ import (
 	"akgo/aklog"
 	"akgo/constant/error_message"
 	"akgo/db"
-	"akgo/feature/account"
+	"akgo/feature/model"
 	"context"
 	"errors"
 	"github.com/google/uuid"
 	"github.com/jackc/pgconn"
 )
 
-func Insert(accountModel account.Account) (pgconn.CommandTag, string, error) {
+func Insert(accountModel model.Account) (pgconn.CommandTag, string, error) {
 	id, _ := uuid.NewUUID()
 	result, err := db.Pg.Exec(
 		context.Background(),
-		`INSERT INTO account (id, name, about, role, mobile, username, email, password) values ($1, $2, $3, $4, $5, $6, $7, $8)`,
+		`INSERT INTO model (id, name, about, role, mobile, username, email, password) values ($1, $2, $3, $4, $5, $6, $7, $8)`,
 		id.String(), accountModel.Name, accountModel.About, accountModel.Role, accountModel.Mobile, accountModel.Username, accountModel.Email, accountModel.Password)
 	return result, id.String(), err
 }
 
-func GetLogin(accountModel account.Account) (account.Account, error) {
-	rows, err := db.Pg.Query(context.Background(), "SELECT id, username FROM account WHERE username=$1 AND password=$2", accountModel.Username, accountModel.Password)
-	result := account.Account{}
+func GetLogin(accountModel model.Account) (model.Account, error) {
+	rows, err := db.Pg.Query(context.Background(), "SELECT id, username FROM model WHERE username=$1 AND password=$2", accountModel.Username, accountModel.Password)
+	result := model.Account{}
 
 	count := 0
 	for rows.Next() {

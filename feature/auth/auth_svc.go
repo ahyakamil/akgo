@@ -2,7 +2,7 @@ package auth
 
 import (
 	"akgo/config"
-	"akgo/feature/account"
+	"akgo/feature/model"
 	"akgo/feature/repository"
 	"errors"
 	"github.com/go-playground/validator/v10"
@@ -17,17 +17,17 @@ func DoRegister(req RegisterReq) (pgconn.CommandTag, error) {
 	}
 
 	hashPassword, _ := config.HashPassword(req.Password)
-	accountModel := account.Account{
+	accountModel := model.Account{
 		Name:     req.Name,
 		About:    req.About,
-		Role:     account.MapStringToRole(req.Role),
+		Role:     model.MapStringToRole(req.Role),
 		Mobile:   req.Mobile,
 		Password: hashPassword,
 		Username: req.Username,
 		Email:    req.Email,
 	}
 
-	if accountModel.Role == account.ROLE_UNKNOWN {
+	if accountModel.Role == model.ROLE_UNKNOWN {
 		return nil, errors.New(ERROR_MAP_ROLE)
 	}
 
@@ -44,7 +44,7 @@ func DoLogin(req LoginReq) (LoginResp, error) {
 	}
 
 	hashPassword, err := config.HashPassword(req.Password)
-	accountModel := account.Account{
+	accountModel := model.Account{
 		Username: req.Username,
 		Password: hashPassword,
 	}

@@ -4,7 +4,7 @@ import (
 	"akgo/aklog"
 	"akgo/config"
 	"akgo/exception"
-	"akgo/feature/account"
+	"akgo/feature/model"
 	"akgo/helper"
 	"akgo/response"
 	"encoding/json"
@@ -26,7 +26,7 @@ func AuthController() {
 				return
 			}
 
-			registerReq.Role = string(account.ROLE_USER)
+			registerReq.Role = string(model.ROLE_USER)
 			_, err := DoRegister(registerReq)
 			if err != nil {
 				if strings.Contains(err.Error(), "validation") {
