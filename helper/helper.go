@@ -2,6 +2,7 @@ package helper
 
 import (
 	"akgo/constant/error_message"
+	"akgo/feature/model"
 	"errors"
 	"github.com/jackc/pgconn"
 	uuid2 "github.com/nu7hatch/gouuid"
@@ -58,4 +59,12 @@ func ValidateDelete(result pgconn.CommandTag) error {
 		err = errors.New(error_message.ERROR_DATA_NOT_FOUND)
 	}
 	return err
+}
+
+func IsAdmin(role string) bool {
+	result := false
+	if role == string(model.ROLE_ADMINISTRATOR) {
+		result = true
+	}
+	return result
 }
