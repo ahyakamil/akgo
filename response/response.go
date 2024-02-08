@@ -32,6 +32,14 @@ func Ok(data json.RawMessage, writer http.ResponseWriter) {
 	build(resp, writer, http.StatusOK)
 }
 
+func Created(data json.RawMessage, writer http.ResponseWriter) {
+	resp := BaseDataJson{
+		Code: code.GENERAL_SUCCESS,
+		Data: data,
+	}
+	build(resp, writer, http.StatusCreated)
+}
+
 func OkStr(data string, writer http.ResponseWriter) {
 	resp := BaseDataString{
 		Code: code.GENERAL_SUCCESS,

@@ -19,11 +19,13 @@ var (
 type User struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
+	Role     string `json:"role"`
 }
 
 type Claims struct {
 	UserID   string `json:"user_id"`
 	Username string `json:"username"`
+	Role     string `json:"role"`
 	jwt.StandardClaims
 }
 
@@ -31,6 +33,7 @@ func CreateAccessToken(user User) (string, error) {
 	claims := &Claims{
 		UserID:   user.ID,
 		Username: user.Username,
+		Role:     user.Role,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(), // 15 minutes
 			IssuedAt:  time.Now().Unix(),
@@ -46,6 +49,7 @@ func CreateRefreshToken(user User) (string, error) {
 	claims := &Claims{
 		UserID:   user.ID,
 		Username: user.Username,
+		Role:     user.Role,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 24 * 7).Unix(), // 7 days
 			IssuedAt:  time.Now().Unix(),

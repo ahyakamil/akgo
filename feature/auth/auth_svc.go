@@ -3,6 +3,7 @@ package auth
 import (
 	"akgo/config"
 	"akgo/feature/account"
+	"akgo/feature/repository"
 	"errors"
 	"github.com/go-playground/validator/v10"
 	"github.com/jackc/pgconn"
@@ -30,7 +31,7 @@ func DoRegister(req RegisterReq) (pgconn.CommandTag, error) {
 		return nil, errors.New(ERROR_MAP_ROLE)
 	}
 
-	commandTag, _, err := account.Insert(accountModel)
+	commandTag, _, err := repository.Insert(accountModel)
 	return commandTag, err
 }
 
@@ -47,7 +48,7 @@ func DoLogin(req LoginReq) (LoginResp, error) {
 		Username: req.Username,
 		Password: hashPassword,
 	}
-	result, err := account.GetLogin(accountModel)
+	result, err := repository.GetLogin(accountModel)
 	if err != nil {
 		return resp, err
 	}

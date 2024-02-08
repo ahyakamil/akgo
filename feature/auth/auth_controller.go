@@ -92,6 +92,7 @@ func AuthController() {
 			user := config.User{
 				ID:       claims.UserID,
 				Username: claims.Username,
+				Role:     claims.Role,
 			}
 
 			accessToken, err := config.CreateAccessToken(user)
