@@ -40,7 +40,7 @@ func AuthController() {
 					exception.BadRequestWM(err.Error(), writer)
 				} else {
 					aklog.Error(err.Error())
-					panic(err.Error())
+					exception.GeneralErrorWM(err.Error(), writer)
 				}
 				return
 			}
