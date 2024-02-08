@@ -41,3 +41,25 @@ func GetLogin(accountModel model.Account) (model.Account, error) {
 	}
 	return result, err
 }
+
+func GetAccountById(accountId string) (model.Account, error) {
+	rows, err := db.Pg.Query(context.Background(), "SELECT id, username, role FROM account WHERE id=$1", accountId)
+	result := model.Account{}
+
+	count := 0
+	for rows.Next() {
+		count += 1
+		err = rows.Scan(&result.ID, &result.Username, &result.Role)
+		if err != nil {
+			aklog.Error("Cannot map result getLogin")
+		}
+	}
+
+	if count == 0 {
+		if err != nil {
+			aklog.Error(err.Error())
+		}
+		err = errors.New(error_message.ERROR_DATA_NOT_FOUND)
+	}
+	return result, err
+}

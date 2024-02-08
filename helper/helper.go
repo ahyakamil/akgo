@@ -3,6 +3,7 @@ package helper
 import (
 	"akgo/constant/error_message"
 	"akgo/feature/model"
+	"akgo/feature/repository"
 	"errors"
 	"github.com/jackc/pgconn"
 	uuid2 "github.com/nu7hatch/gouuid"
@@ -61,10 +62,13 @@ func ValidateDelete(result pgconn.CommandTag) error {
 	return err
 }
 
-func IsAdmin(role string) bool {
+func IsAdmin(accountId string) bool {
 	result := false
-	if role == string(model.ROLE_ADMINISTRATOR) {
-		result = true
+	accountModel, err := repository.GetAccountById(accountId)
+	if err == nil {
+		if accountModel.Role == model.ROLE_ADMINISTRATOR {
+			result = true
+		}
 	}
 	return result
 }
