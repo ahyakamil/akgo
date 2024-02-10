@@ -1,6 +1,7 @@
 package main
 
 import (
+	"akgo/akmdc"
 	"akgo/config"
 	"akgo/db"
 	"akgo/env"
@@ -12,6 +13,7 @@ import (
 )
 
 func main() {
+	akmdc.Init()
 	db.InitPG()
 	defer db.Pg.Close()
 	if !config.IsRSAPrivateKey(env.PasswordPrivateKey) {

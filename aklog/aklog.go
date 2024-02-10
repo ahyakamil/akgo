@@ -13,19 +13,28 @@ var secretKeywords []string
 func init() {
 	secretKeywords = []string{"token", "password", "auth"}
 }
-
 func Info(message string) {
-	log.Print(" INFO " + build(message))
+	log.Print(" INFO " + build(message, "default"))
 }
 func Warn(message string) {
-	log.Print(" WARN " + build(message))
+	log.Print(" WARN " + build(message, "default"))
 }
 func Error(message string) {
-	log.Print(" ERROR " + build(message))
+	log.Print(" ERROR " + build(message, "default"))
 }
 
-func build(message string) string {
-	mdc := akmdc.GetMDC()
+func InfoWithCtx(message string, ctxKey string) {
+	log.Print(" INFO " + build(message, ctxKey))
+}
+func WarnWithCtx(message string, ctxKey string) {
+	log.Print(" WARN " + build(message, ctxKey))
+}
+func ErrorWithCtx(message string, ctxKey string) {
+	log.Print(" ERROR " + build(message, ctxKey))
+}
+
+func build(message string, ctxKey string) string {
+	mdc := akmdc.GetMDCWithCtx(ctxKey)
 	re := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`)
 	return "MDC_GROUP=" + fmt.Sprintf("%v", mdc["MDC_GROUP"]) + " " + filter(re.ReplaceAllString(message, ""))
 }

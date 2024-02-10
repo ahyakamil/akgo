@@ -5,7 +5,6 @@ import (
 	"akgo/akmdc"
 	"akgo/exception"
 	"bytes"
-	"context"
 	"github.com/google/uuid"
 	"io/ioutil"
 	"net/http"
@@ -36,8 +35,6 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Headers", "accept, origin, content-type, x-json, x-prototype-version, x-requested-with, authorization")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, UPDATE, PUT, PATCH, DELETE")
-		ctx := context.WithValue(r.Context(), akmdc.MdcKey, make(akmdc.MDC))
-		akmdc.Ctx = ctx
 		mdc := akmdc.GetMDC()
 		mdcUUID := uuid.New().String()
 		mdc["MDC_GROUP"] = mdcUUID
@@ -123,7 +120,7 @@ func GlobalMiddleware(next *CustomServeMux) http.Handler {
 			}()
 
 			customResponseWriter.Header().Set("Mdc-Group", mdcUUID)
-			next.DefaultServeMux.ServeHTTP(customResponseWriter, r.WithContext(ctx))
+			next.DefaultServeMux.ServeHTTP(customResponseWriter, r)
 
 			statusCode := customResponseWriter.StatusCode
 			responseStr := "response=" + string(customResponseWriter.ResponseData)
